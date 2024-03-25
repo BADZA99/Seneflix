@@ -1,12 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import Seneflix from "../images/logoSeneflix.png"
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { auth, googleAuth } from '../firebase/setup';
+import { signOut } from 'firebase/auth';
 
 
 
 
 export default function Navbar() {
-      const [movies, setMovies] = useState([]);
+  const navigate=useNavigate()
+  const [movies, setMovies] = useState([]);
+ 
+
+  const SignoutClick =async () => {
+    try {
+       const result =await signOut(auth);
+        console.log(result);
+         setIsAuthenticated(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
       const getMovie = () => {
         try {
           fetch(
@@ -18,6 +33,16 @@ export default function Navbar() {
           console.log(error);
         }
       };
+
+      const SinginClick = () => {
+        navigate('/signin')
+      }
+
+      
+      console.log(auth);
+        const [isAuthenticated, setIsAuthenticated] = useState(
+          auth.currentUser?.emailVerified
+        );
 
       useEffect(() => {
         getMovie();
@@ -41,7 +66,6 @@ export default function Navbar() {
           padding: "5px",
           backgroundColor: "rgba(0,0,0,0.3)",
           color: "white",
-
         }}
       >
         <img
@@ -50,16 +74,35 @@ export default function Navbar() {
             width: "90px",
             height: "90px",
           }}
+          alt="logo seneflix"
         />
-        <Button
-          color="error"
-          variant="contained"
-          sx={{
-            height: "40px",
-          }}
-        >
-          Sign In
-        </Button>
+        <div>
+          {isAuthenticated ? (
+            <Button
+              color="error"
+              variant="contained"
+              sx={{
+                height: "40px",
+                marginLeft: "10px",
+              }}
+              onClick={SignoutClick}
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button
+              color="error"
+              variant="contained"
+              sx={{
+                height: "40px",
+                marginLeft: "10px",
+              }}
+              onClick={SinginClick}
+            >
+              Sign in
+            </Button>
+          )}
+        </div>
       </div>
 
       <div>
@@ -68,7 +111,7 @@ export default function Navbar() {
             color: "#f1f1f1",
             textAlign: "left",
             padding: "20px",
-            marginTop:"5%",
+            marginTop: "5%",
             paddingLeft: "23px",
             fontSize: "70px",
             fontFamily: "Helvetica Neue",
@@ -85,24 +128,24 @@ export default function Navbar() {
             fontSize: "24px",
             fontFamily: "Helvetica Neue",
             fontWeight: "lighter",
-            marginTop:"1%",
+            marginTop: "1%",
           }}
         >
           {movies[0]?.overview}
         </h4>
-      <Button
-        variant="contained"
-        sx={{
-          color:"black",
-          bgcolor:"white",
-          height: "40px",
-          marginLeft: "23px",
-          marginTop: "1%",
-          fontWeight:"bold",
-        }}
-      >
-        play trailer
-      </Button>
+        <Button
+          variant="contained"
+          sx={{
+            color: "black",
+            bgcolor: "white",
+            height: "40px",
+            marginLeft: "23px",
+            marginTop: "1%",
+            fontWeight: "bold",
+          }}
+        >
+          play trailer
+        </Button>
       </div>
     </div>
   );
