@@ -6,6 +6,8 @@ import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
+import { doc, setDoc } from 'firebase/firestore';
+import { database } from '../firebase/setup';
 
 export default function Home() {
   const [movies,setMovies]=useState([]);
@@ -27,6 +29,24 @@ useEffect(() => {
   getMovie()
 },[]);
 
+const addMovie = async (movie)=>{
+  const movieRef= doc(database,"Movies",`${movie.id}`)
+  try {
+    await setDoc(movieRef,{
+      id:movie.id,
+      movieName:movie.title,
+      Movieposter:movie.poster_path,
+      overview:movie.overview,
+      release_date:movie.release_date,
+      vote_average:movie.vote_average
+    
+    });
+  } catch (error) {
+    console.log(error)
+    
+  }
+}
+
 
 
   return (
@@ -41,6 +61,9 @@ useEffect(() => {
 
       { 
         movies?.map((movie)=>{
+          {
+            addMovie(movie)
+          }
           return (
             <Grid
               item

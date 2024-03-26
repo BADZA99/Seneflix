@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router";
 import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import { addDoc, collection, doc, getDocs } from "firebase/firestore";
+import { auth, database } from "../firebase/setup";
+import { useState } from "react";
 
 
 
@@ -10,6 +13,52 @@ import TextField from "@mui/material/TextField";
 
 export default function MovieDetails() {
   const location = useLocation();
+
+  const [review,setReview]=useState("");
+  const [reviewData,setReviewData]=useState([]);
+
+const MovieRef=doc(database,"Movies",`${location.state.movie.id}`);
+
+const ReviewRef=collection(MovieRef,"Reviews");
+
+  const addReview = async ()=>{
+
+    try {
+      await addDoc(ReviewRef,{
+        movieReview:review,
+        username:auth.currentUser?.displayName,
+        email:auth.currentUser?.email,
+        profileImg:auth.currentUser?.photoURL
+
+      
+      });
+      
+    } catch (error) {
+      console.log(error)
+      
+    }
+  }
+
+  const showReviews = async()=>{
+
+    try {
+      const data= await getDocs(ReviewRef)
+      const filteredData=data.docs.map((doc)=>({
+        ...doc.data(),
+        id:doc.id
+      }))
+      setReviewData(filteredData)
+    } catch (error) {
+      console.log(error)
+      
+    }
+  }
+
+  useEffect(()=>{
+    showReviews()
+  },[]);
+
+  
   return (
     <Grid container bgcolor={"white"}>
       <Grid item xs={8}>
@@ -31,11 +80,10 @@ export default function MovieDetails() {
               paddingTop: "200px",
               paddingLeft: "30px",
               paddingRight: "30px",
-              // backgroundColor: "rgba(0,0,0,0.5)",
               position: "absolute",
               top: "53%",
               left: "0%",
-              fontFamily: "initial",
+              fontFamily: "Roboto",
             }}
           >
             <Grid container>
@@ -131,6 +179,9 @@ export default function MovieDetails() {
                   backgroundColor: "white",
                   borderRadius: "5px",
                 }}
+                onChange={(e) => {
+                  setReview(e.target.value);
+                }}
               />
               <Button
                 variant="contained"
@@ -140,6 +191,7 @@ export default function MovieDetails() {
                   marginTop: "10px",
                   bgcolor: "red",
                 }}
+                onClick={addReview}
               >
                 Submit
               </Button>
@@ -152,12 +204,53 @@ export default function MovieDetails() {
                 style={{
                   color: "#A4A4A4",
                   marginTop: "10px",
-                  fontSize:"20px",
+                  fontSize: "20px",
                   fontWeight: "200",
                 }}
               >
                 Review
               </h6>
+              {reviewData.map((review) => (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "20px",
+                    }}
+                  >
+                    <img
+                      src={review.profileImg}
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "50px",
+                      }}
+                      alt="profile-img"
+                    />
+                    <h6
+                      style={{
+                        color: "#A4A4A4",
+
+                        fontSize: "15px",
+                        fontWeight: "300",
+                        paddingLeft:"10px"
+                      }}
+                    >
+                      {review.username}
+                    </h6>
+                  </div>
+                  <h6
+                    style={{
+                      color: "white",
+                      marginTop: "10px",
+                      fontSize: "15px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    {review.movieReview}
+                  </h6>
+                </>
+              ))}
             </div>
           </Grid>
         </div>
