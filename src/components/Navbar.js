@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Seneflix from "../images/logoSeneflix.png"
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { auth, googleAuth } from '../firebase/setup';
+import { auth } from '../firebase/setup';
 import { signOut } from 'firebase/auth';
 
 
@@ -50,7 +50,9 @@ export default function Navbar() {
   return (
     <div
       style={{
-        backgroundImage: `url(https://image.tmdb.org/t/p/original${movies[0]?.poster_path})`,
+        backgroundImage: `
+           linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url(https://image.tmdb.org/t/p/original${movies[0]?.poster_path})`,
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
@@ -64,7 +66,7 @@ export default function Navbar() {
           justifyContent: "space-between",
           alignItems: "center",
           padding: "5px",
-          backgroundColor: "rgba(0,0,0,0.3)",
+          // backgroundColor: "rgba(0,0,0,0.3)",
           color: "white",
         }}
       >

@@ -4,6 +4,7 @@ import './App.css';
 import Main from './components/Main';
 import {Route,Routes } from 'react-router-dom';
 import Signin from './components/Signin';
+import MovieDetails from './components/MovieDetails';
 
 
 
@@ -13,6 +14,7 @@ function App() {
 <Routes>
 <Route path='/' element={<Main />}/>
 <Route path='/signin' element={<Signin />}/>
+<Route path='/movieDetails' element={<MovieDetails />}/>
 
 </Routes>
     </div>

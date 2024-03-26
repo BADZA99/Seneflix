@@ -5,6 +5,7 @@ import Card from '@mui/material/Card';
 // import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
   const [movies,setMovies]=useState([]);
@@ -40,25 +41,29 @@ useEffect(() => {
 
       { 
         movies?.map((movie)=>{
-          return <Grid item xs={3} 
-          style={{
-            paddingTop:"20px",
-            paddingRight:"20px",
-            paddingLeft:"20px",
-          }}
-          >
-            <Box>
-              <Card>
-              
-                  <CardMedia
-                    component="img"
-                    height="150"
-                    image={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`}
-                  ></CardMedia>
-                
-              </Card>
-            </Box>
-          </Grid>;
+          return (
+            <Grid
+              item
+              xs={3}
+              style={{
+                paddingTop: "20px",
+                paddingRight: "20px",
+                paddingLeft: "20px",
+              }}
+            >
+              <Box>
+                <Link to="/movieDetails" state={{movie:movie}}>
+                  <Card>
+                    <CardMedia
+                      component="img"
+                      height="150"
+                      image={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`}
+                    ></CardMedia>
+                  </Card>
+                </Link>
+              </Box>
+            </Grid>
+          );
         })
 
       }
