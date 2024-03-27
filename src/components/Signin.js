@@ -12,13 +12,17 @@ export default function Signin() {
     const googleSignin=async ()=>{
         try {
             const result = await signInWithPopup(auth, googleAuth);
-setTimeout(()=>{
-    auth.currentUser?.emailVerified && navigate('/')
 
-},2000)
- toast.success("Signin Successfully", {
-   theme: "dark",
- });
+            if(result){
+
+              setTimeout(()=>{
+              auth.currentUser?.emailVerified && navigate('/')
+          
+          },2000)
+           toast.success("Signin Successfully", {
+             theme: "dark",
+           });
+            }
             // console.log(result)
         } catch (error) {
             console.log(error)

@@ -6,7 +6,7 @@ import { auth } from '../firebase/setup';
 import { signOut } from 'firebase/auth';
   import { ToastContainer, toast } from "react-toastify";
   import "react-toastify/dist/ReactToastify.css";
-import Trailer from './Trailer';
+// import Trailer from './Trailer';
 
 
 
@@ -20,10 +20,12 @@ export default function Navbar() {
     try {
        const result =await signOut(auth);
         // console.log(result);
-         setIsAuthenticated(false);
-          toast.success("Logout Successfully",{
-            theme:"dark"
-          });
+        if(result){
+          setIsAuthenticated(false);
+           toast.success("Logout Successfully",{
+             theme:"dark"
+           });
+        }
     } catch (error) {
       console.log(error);
     }

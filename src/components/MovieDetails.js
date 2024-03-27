@@ -9,6 +9,7 @@ import { useState } from "react";
   import { ToastContainer, toast } from "react-toastify";
   import "react-toastify/dist/ReactToastify.css";
 import Trailer from "./Trailer";
+import { useCallback } from "react";
 
 
 
@@ -45,24 +46,22 @@ const ReviewRef=collection(MovieRef,"Reviews");
     }
   }
 
-  const showReviews = async()=>{
+ const showReviews = useCallback(async () => {
+   try {
+     const data = await getDocs(ReviewRef);
+     const filteredData = data.docs.map((doc) => ({
+       ...doc.data(),
+       id: doc.id,
+     }));
+     setReviewData(filteredData);
+   } catch (error) {
+     console.log(error);
+   }
+ }, [ReviewRef, setReviewData]);
 
-    try {
-      const data= await getDocs(ReviewRef)
-      const filteredData=data.docs.map((doc)=>({
-        ...doc.data(),
-        id:doc.id
-      }))
-      setReviewData(filteredData)
-    } catch (error) {
-      console.log(error)
-      
-    }
-  }
-
-  useEffect(()=>{
-    showReviews()
-  },[reviewData]);
+ useEffect(() => {
+   showReviews();
+ }, [showReviews]);
 
   
   return (

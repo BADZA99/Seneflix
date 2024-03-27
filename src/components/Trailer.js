@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import Youtube from 'react-youtube';
 import { useEffect } from "react";
 import { useState } from "react";
+import { useCallback } from "react";
 
 const customStyles = {
   content: {
@@ -17,30 +18,31 @@ const customStyles = {
 };
 export default function Trailer({location,movieId}) {
     const [trailerView,setTrailerView]=useState([])
-    const ShowTrailer =()=>{
-        fetch(
-          `https://api.themoviedb.org/3/movie/${movieId ? movieId : location?.state?.movie.id}/videos?api_key=1b82a9898833abaf97361da2a282fe83&language=en-US`
-        ).then(res=>res.json()).then(json=>setTrailerView(json.results));
-        console.log(trailerView);
-    }
+   const ShowTrailer = useCallback(() => {
+     fetch(
+       `https://api.themoviedb.org/3/movie/${
+         movieId ? movieId : location?.state?.movie.id
+       }/videos?api_key=1b82a9898833abaf97361da2a282fe83&language=en-US`
+     )
+       .then((res) => res.json())
+       .then((json) => setTrailerView(json.results));
+   }, [movieId, location?.state?.movie.id]);
+
+   useEffect(() => {
+     ShowTrailer();
+   }, [ShowTrailer]);
 
 
-
-    useEffect(() => {
-      ShowTrailer();
-    }, []);
-
-
-  let subtitle;
+//   let subtitle;
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
   function openModal() {
     setIsOpen(true);
   }
 
-  function afterOpenModal() {
-    subtitle.style.color = "#f00";
-  }
+//   function afterOpenModal() {
+//     subtitle.style.color = "#f00";
+//   }
 
   function closeModal() {
     setIsOpen(false);
@@ -59,13 +61,19 @@ export default function Trailer({location,movieId}) {
       onClick={openModal}>Play Trailer</Button>
       <Modal
         isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
+        // onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <h2 ref={(_subtitle) => (subtitle = _subtitle)}></h2>
-        <button onClick={closeModal}>close</button>
+        {/* <h2 ref={(_subtitle) => (subtitle = _subtitle)}></h2> */}
+        <Button onClick={closeModal}
+        variant='contained'
+        sx={{
+            bgcolor:"red",
+            color:"white"
+        }}
+        >close</Button>
         <Youtube videoId={trailerView[0]?.key}/>
       </Modal>
     </div>

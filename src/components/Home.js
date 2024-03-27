@@ -61,8 +61,8 @@ const addMovie = async (movie)=>{
 
       { 
         movies?.map((movie)=>{
-          {
-            addMovie(movie)
+          if (movies) {
+            addMovie(movie);
           }
           return (
             <Grid
