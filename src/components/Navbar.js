@@ -83,8 +83,8 @@ export default function Navbar() {
         <img
           src={Seneflix}
           style={{
-            width: "90px",
-            height: "90px",
+            width: "120px",
+            height: "100px",
           }}
           alt="logo seneflix"
         />
