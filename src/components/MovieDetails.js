@@ -6,7 +6,9 @@ import TextField from "@mui/material/TextField";
 import { addDoc, collection, doc, getDocs } from "firebase/firestore";
 import { auth, database } from "../firebase/setup";
 import { useState } from "react";
-
+  import { ToastContainer, toast } from "react-toastify";
+  import "react-toastify/dist/ReactToastify.css";
+import Trailer from "./Trailer";
 
 
 
@@ -24,14 +26,18 @@ const ReviewRef=collection(MovieRef,"Reviews");
   const addReview = async ()=>{
 
     try {
-      await addDoc(ReviewRef,{
+      auth.currentUser && await addDoc(ReviewRef,{
         movieReview:review,
         username:auth.currentUser?.displayName,
         email:auth.currentUser?.email,
         profileImg:auth.currentUser?.photoURL
-
-      
       });
+      auth.currentUser ? toast.success("Review Added Successfully", {
+        theme: "dark",
+      }):toast.error("Please Signin to add review", {
+        theme: "dark",
+      })
+      ;
       
     } catch (error) {
       console.log(error)
@@ -56,7 +62,7 @@ const ReviewRef=collection(MovieRef,"Reviews");
 
   useEffect(()=>{
     showReviews()
-  },[]);
+  },[reviewData]);
 
   
   return (
@@ -135,7 +141,7 @@ const ReviewRef=collection(MovieRef,"Reviews");
               >
                 {location.state.movie?.overview}
               </h2>
-              <Button
+              {/* <Button
                 variant="contained"
                 style={{
                   color: "black",
@@ -143,7 +149,8 @@ const ReviewRef=collection(MovieRef,"Reviews");
                 }}
               >
                 Play trailer
-              </Button>
+              </Button> */}
+              <Trailer location={location}/>
             </Grid>
           </div>
         </div>
@@ -233,7 +240,7 @@ const ReviewRef=collection(MovieRef,"Reviews");
 
                         fontSize: "15px",
                         fontWeight: "300",
-                        paddingLeft:"10px"
+                        paddingLeft: "10px",
                       }}
                     >
                       {review.username}
@@ -255,6 +262,7 @@ const ReviewRef=collection(MovieRef,"Reviews");
           </Grid>
         </div>
       </Grid>
+      <ToastContainer autoClose={2000} />
     </Grid>
   );
 }

@@ -4,6 +4,9 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase/setup';
 import { signOut } from 'firebase/auth';
+  import { ToastContainer, toast } from "react-toastify";
+  import "react-toastify/dist/ReactToastify.css";
+import Trailer from './Trailer';
 
 
 
@@ -16,8 +19,11 @@ export default function Navbar() {
   const SignoutClick =async () => {
     try {
        const result =await signOut(auth);
-        console.log(result);
+        // console.log(result);
          setIsAuthenticated(false);
+          toast.success("Logout Successfully",{
+            theme:"dark"
+          });
     } catch (error) {
       console.log(error);
     }
@@ -36,10 +42,11 @@ export default function Navbar() {
 
       const SinginClick = () => {
         navigate('/signin')
+
       }
 
       
-      console.log(auth);
+      // console.log(auth);
         const [isAuthenticated, setIsAuthenticated] = useState(
           auth.currentUser?.emailVerified
         );
@@ -60,6 +67,7 @@ export default function Navbar() {
         width: "100%",
       }}
     >
+      <ToastContainer autoClose={2000} />
       <div
         style={{
           display: "flex",
@@ -135,7 +143,7 @@ export default function Navbar() {
         >
           {movies[0]?.overview}
         </h4>
-        <Button
+        {/* <Button
           variant="contained"
           sx={{
             color: "black",
@@ -147,7 +155,8 @@ export default function Navbar() {
           }}
         >
           play trailer
-        </Button>
+        </Button> */}
+        {/* <Trailer movieId={movies[1]?.id} /> */}
       </div>
     </div>
   );
