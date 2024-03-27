@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -16,7 +16,7 @@ import { useCallback } from "react";
 
 export default function MovieDetails() {
   const location = useLocation();
-
+  const navigate = useNavigate();
   const [review,setReview]=useState("");
   const [reviewData,setReviewData]=useState([]);
 
@@ -66,27 +66,28 @@ const ReviewRef=collection(MovieRef,"Reviews");
   
   return (
     <Grid container bgcolor={"white"}>
+      {/* ajoute un  bouton retour  */}
+
       <Grid item xs={8}>
         <div
           style={{
             backgroundImage: `
-            linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-            url(https://image.tmdb.org/t/p/original${location.state.movie?.poster_path})`,
+              linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+              url(https://image.tmdb.org/t/p/original${location.state.movie?.poster_path})`,
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             height: "100vh",
             width: "100%",
-            position: "relative",
           }}
         >
           <div
             style={{
-              paddingTop: "200px",
+              paddingTop: "400px",
               paddingLeft: "30px",
               paddingRight: "30px",
-              position: "absolute",
-              top: "53%",
+              // position: "absolute",
+              // marginTop: "53%",
               left: "0%",
               fontFamily: "Roboto",
             }}
@@ -141,20 +142,19 @@ const ReviewRef=collection(MovieRef,"Reviews");
                 {location.state.movie?.overview}
               </h2>
               {/* <Button
-                variant="contained"
-                style={{
-                  color: "black",
-                  backgroundColor: "white",
-                }}
-              >
-                Play trailer
-              </Button> */}
-              <Trailer location={location}/>
+                  variant="contained"
+                  style={{
+                    color: "black",
+                    backgroundColor: "white",
+                  }}
+                >
+                  Play trailer
+                </Button> */}
+              <Trailer location={location} />
             </Grid>
           </div>
         </div>
       </Grid>
-
       <Grid item xs={4}>
         <div
           style={{
@@ -165,6 +165,20 @@ const ReviewRef=collection(MovieRef,"Reviews");
           }}
         >
           <Grid container>
+            <Button
+              variant="contained"
+              onClick={() => {
+                navigate("/");
+              }}
+              sx={{
+                height: "37px",
+                ml: "80%",
+                marginTop: "10px",
+                bgcolor: "red",
+              }}
+            >
+              Back
+            </Button>
             <div>
               <h5
                 style={{
@@ -236,7 +250,6 @@ const ReviewRef=collection(MovieRef,"Reviews");
                     <h6
                       style={{
                         color: "#A4A4A4",
-
                         fontSize: "15px",
                         fontWeight: "300",
                         paddingLeft: "10px",
