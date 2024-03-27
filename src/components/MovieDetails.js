@@ -83,7 +83,7 @@ const ReviewRef=collection(MovieRef,"Reviews");
         >
           <div
             style={{
-              paddingTop: "400px",
+              paddingTop: "380px",
               paddingLeft: "30px",
               paddingRight: "30px",
               // position: "absolute",
