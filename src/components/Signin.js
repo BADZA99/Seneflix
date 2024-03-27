@@ -11,9 +11,9 @@ export default function Signin() {
     const navigate = useNavigate()
     const googleSignin=async ()=>{
         try {
-            const result = await signInWithPopup(auth, googleAuth);
+        await signInWithPopup(auth, googleAuth);
 
-            if(result){
+            
 
               setTimeout(()=>{
               auth.currentUser?.emailVerified && navigate('/')
@@ -22,7 +22,7 @@ export default function Signin() {
            toast.success("Signin Successfully", {
              theme: "dark",
            });
-            }
+            
             // console.log(result)
         } catch (error) {
             console.log(error)

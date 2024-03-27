@@ -18,14 +18,14 @@ export default function Navbar() {
 
   const SignoutClick =async () => {
     try {
-       const result =await signOut(auth);
+       await signOut(auth);
         // console.log(result);
-        if(result){
+ 
           setIsAuthenticated(false);
            toast.success("Logout Successfully",{
              theme:"dark"
            });
-        }
+        
     } catch (error) {
       console.log(error);
     }
